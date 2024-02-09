@@ -44,6 +44,12 @@ public class EmpresaServiceImpl implements EmpresaService {
             if (tipoDocumentoBd.isEmpty()) {
                 return new BaseResponse(Constants.CODE_ERROR, Constants.MESS_ERROR, Optional.empty());
             }
+            //  Validar que no haya sido agregada previamente la empresa
+            Optional<EmpresaEntity> empresaBdOpt = empresaRepository.findByNumDocu(response.getNumeroDocumento());
+            if(!empresaBdOpt.isEmpty()){
+                return new BaseResponse(Constants.CODE_ERROR, Constants.MESS_ERROR + " RUC registrado.", Optional.empty());
+            }
+
             EmpresaEntity empresa = new EmpresaEntity();
             empresa.setNumDocu(response.getNumeroDocumento());
             empresa.setRazonSocial(response.getRazonSocial());
